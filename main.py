@@ -1,10 +1,23 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware 
+
 from pydantic import BaseModel
+import uvicorn
 
 
 from generate import generate
 
 app = FastAPI()
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+) 
+
 
 class Input(BaseModel):
     prompt : str
@@ -41,3 +54,6 @@ async def generatebook(input:Input):
         "poster":imagecid_url
     }
     # return {"status": "success"}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host='0.0.0.0', port=8000)
