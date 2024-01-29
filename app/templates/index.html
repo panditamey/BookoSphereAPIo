@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- <model-viewer style="height: 100vh; width: 100%; background-color: black;" src="/solar_system.glb" alt="VR Headset"
+        auto-rotate camera-controls ar ios-src="static/Among_Us_.glb"></model-viewer> -->
+    <model-viewer style="height: 50vh; width: 100%" camera-controls touch-action="pan-y" autoplay ar
+        src="{{ url_for('static', path=model) }}" ar alt="A 3D Model">
+        <effect-composer id="customComposer" msaa="8">
+        </effect-composer>
+    </model-viewer>
+    <script type="module">
+        import * as PostProcessing from 'https://cdn.jsdelivr.net/npm/postprocessing@6.30.1/build/postprocessing.esm.js';
+        const customComposer = document.querySelector("effect-composer#customComposer");
+
+        const grid = new PostProcessing.GridEffect();
+        const sepia = new PostProcessing.SepiaEffect();
+        // The camera is set automatically when added to the <effect-composer>
+        const noisePass = new PostProcessing.EffectPass(undefined, grid, sepia);
+        customComposer.addPass(noisePass);
+
+        customComposer.nextElementSibling.addEventListener('input', (e) => {
+            grid.scale = e.target.value;
+            // Request a render frame, to update
+            customComposer.queueRender();
+        });
+    </script>
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</body>
+
+</html>
