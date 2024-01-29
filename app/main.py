@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import uvicorn
 
-from generate import generate
+from features.generate import generate
 
 app = FastAPI()
 origins = ['*']
